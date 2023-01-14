@@ -28,6 +28,8 @@ optional arguments:
 ## Exemplo
 
 ```
+➜ python3 crawau.py google.com
+
   __________________
 <       Craw Au      >
   ------------------
