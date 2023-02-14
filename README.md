@@ -9,6 +9,11 @@ Ela realiza uma consulta na URL passada e identifica todos os links presentes na
 
 Existe também a possibilidade de realizar uma consulta em profundidade, onde a ferramenta após descobrir os links, entra neles e realiza uma nova consulta
 
+## Instalação
+1) ``git clone https://github.com/SQU4NCH/CrawAu``
+2) ``cd CrawAu``
+3) ``python3 -m pip install -r requirements.txt``
+4) ``python3 crawau.py --help``
 
 ## Opções
 
