@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
-import re
 import sys
+from banner.Banner import banner
 
 try:
     import requests
@@ -11,6 +11,19 @@ except:
     print()
     print("pip3 install requests")
     sys.exit()
+
+try:
+    from bs4 import BeautifulSoup
+except:
+    print("É preciso instalar a biblioteca beautifulsoup")
+    print()
+    print("pip install beautifulsoup4")
+    sys.exit()
+
+#Cores
+R = '\033[31m'  # Vermelho
+G = '\033[32m'  # Verde
+END = '\033[0m'
 
 fora = set()
 noescopo = set()
@@ -22,7 +35,7 @@ def verifica_arquivo(url,file,silent=0):
     r = requests.get(f'{url}/{file}', headers=headers)
     if r.status_code == 200:
         if silent == 0:
-            print(f'\033[2;32m[+] {file} existe\033[0;0m')
+            print(f'{G}[+] {file} existe{END}')
             print(f'[*] Conteúdo de {file}:')
             print()
             print(r.text)
@@ -31,13 +44,20 @@ def verifica_arquivo(url,file,silent=0):
             print(r.text)
 
     else:
-        print(f'\033[2;31m[-] {file} não existe\033[0;0m')
+        print(f'{R}[-] {file} não existe{END}')
 
 # Função que busca links presentes na página
 def pega_links(url):
     r = requests.get(url, headers=headers)
     content = r.text
-    links = set(re.findall(r'(?<=href=["\'])https?://.+?(?=["\'])', content))
+    
+    soup = BeautifulSoup(content, 'html.parser')
+    all_links = soup.find_all('a')
+
+    links = set()
+    for link in all_links:
+        if "http" in link.get("href"):
+            links.add(link.get("href"))
 
     return links
 
@@ -51,10 +71,8 @@ def verifica_links(links):
             fora.add(i)
             continue
 
-        valida = requests.get(i, headers=headers)
-        if valida.status_code == 200:
-            noescopo.add(i)
-            print(i)
+        noescopo.add(i)
+        print(i)
 
 # Menu de ajuda
 parser = argparse.ArgumentParser()
@@ -68,7 +86,7 @@ parser.add_argument('target',
                     )
 parser.add_argument('-d', '--deep',
                     dest='deep',
-                    help='Deeping level for crawler'
+                    help='Deeping level for crawler (default: 0)'
                     )
 parser.add_argument('-u', '--user-agent',
                     dest='user_agent',
@@ -82,7 +100,7 @@ parser.add_argument('--no-robots',
                     action='store_true',
                     dest='norobots',
                     help='Not look for robots.txt (default: no)'
-                    )                      
+                    )                     
 args = parser.parse_args()
 
 file = args.file_name
@@ -97,25 +115,14 @@ else:
 try:
     r = requests.get(url, headers=headers)
 except:
-    print(f'\033[2;31m[-] Não é possível se conectar a {args.target}\033[0;0m')  
+    print(f'{R}[-] Não é possível se conectar a {args.target}{END}')  
     sys.exit()  
 
 if not args.quiet:
-    print("""
-  __________________
-<       Craw Au      >
-  ------------------
-            \   ^__^
-             \  (oo)\_______
-                (__)\       )\/\\
-                    ||----w |
-                    ||     ||
-
-\033[2;34m By: Squ4nch\033[0;0m
-    """)
+    print(banner.banner)
     print()
     print(f'[*] Conectando a {args.target}')
-    print(f'\033[2;32m[+] Status Code {r.status_code}\033[0;0m')
+    print(f'{G}[+] Status Code {r.status_code}{END}')
     if not args.norobots:
         print('[*] Verificando robots.txt')
         verifica_arquivo(url,"robots.txt")
@@ -146,7 +153,7 @@ else:
             verifica_links(links)
 
 if len(noescopo) == 0:
-    print("\033[2;31m[-] Nada encontrado!\033[0;0m")
+    print(f"{R}[-] Nada encontrado!{END}")
 
 # Retorna os links que aparentemente estão fora do escopo
 # Necessário para validar se realmente está fora do escopo
@@ -159,7 +166,6 @@ if not args.quiet:
 
 # Salva os links do escopo em um arquivo
 if args.file_name:
-    arquivo = open(file, 'w')
-    for l in noescopo:
-        arquivo.write(l+'\n')
-    arquivo.close
+    with open(file, 'w') as arquivo:
+        for l in noescopo:
+            arquivo.write(l+'\n')
