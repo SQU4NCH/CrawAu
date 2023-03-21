@@ -58,6 +58,8 @@ def pega_links(url):
     for link in all_links:
         if "http" in link.get("href"):
             links.add(link.get("href"))
+        else:
+            links.add(f'{url}/{link.get("href")}')
 
     return links
 
