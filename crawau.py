@@ -107,7 +107,11 @@ args = parser.parse_args()
 
 file = args.file_name
 deep = args.deep
-url = f'http://{args.target}'
+
+if "http" not in args.target:
+    url = f'http://{args.target}'
+else:
+    url = args.target
 
 if not args.user_agent:
     headers = {'User-Agent': 'CrawAu'}
