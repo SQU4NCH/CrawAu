@@ -1,8 +1,9 @@
 
 class banner:
-    banner = """
+    versao = "0.5.1"
+    banner = f"""
     __________________
-  <       Craw Au      >
+  <    CrawAu {versao}  >
     ------------------
                 \   ^__^
                  \  (oo)\_______

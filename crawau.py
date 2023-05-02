@@ -129,6 +129,11 @@ if not args.quiet:
     print()
     print(f'[*] Conectando a {args.target}')
     print(f'{G}[+] Status Code {r.status_code}{END}')
+    try: #################
+        servidor = r.headers['Server']
+        print(f"[*] Servidor: {servidor}")
+    except:
+        pass
     if not args.norobots:
         print('[*] Verificando robots.txt')
         verifica_arquivo(url,"robots.txt")
