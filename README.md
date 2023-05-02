@@ -37,51 +37,40 @@ options:
 ## Exemplo
 
 ```
-➜ python3 crawau.py google.com
+➜ python3 crawau.py squ4nch.github.io
 
-  __________________
-<       Craw Au      >
-  ------------------
-            \   ^__^
-             \  (oo)\_______
-                (__)\       )\/\
-                    ||-----||
-                    ||     ||
+    __________________
+  <    CrawAu 0.5.1  >
+    ------------------
+                \   ^__^
+                 \  (oo)\_______
+                    (__)\       )\/\
+                        ||-----||
+                        ||     ||
 
- By: Squ4nch
+    By: Squ4nch
+    
 
-[*] Conectando a google.com
+[*] Conectando a squ4nch.github.io
 [+] Status Code 200
+[*] Servidor: GitHub.com
 [*] Verificando robots.txt
 [+] robots.txt existe
 [*] Conteúdo de robots.txt:
 
-User-agent: *
-Disallow: /search
-Allow: /search/about
-Allow: /search/static
-Allow: /search/howsearchworks
-Disallow: /sdch
-.
-.
-.
-Sitemap: https://www.google.com/sitemap.xml
+:)
 
 [*] Extraindo links presentes na página
 
-http://www.google.com/setprefdomain?prefdom=BR&amp;prev=http://www.google.com.br/&amp;sig=K_HS5DP6gHnHe2ZnMCtzBNY8sHqrU%3D
-https://accounts.google.com/ServiceLogin?hl=pt-BR&passive=true&continue=http://www.google.com/&ec=GAZAAQ
-http://www.google.com.br/history/optout?hl=pt-BR
-http://www.google.com.br/imghp?hl=pt-BR&tab=wi
-https://news.google.com/?tab=wn
-http://maps.google.com.br/maps?hl=pt-BR&tab=wl
-https://mail.google.com/mail/?tab=wm
-https://play.google.com/?hl=pt-BR&tab=w8
-https://www.google.com.br/intl/pt-BR/about/products?tab=wh
-https://drive.google.com/?tab=wo
+http://squ4nch.github.io/whoami.html
+http://squ4nch.github.io/Certificações.html
+http://squ4nch.github.io/index.html
+http://squ4nch.github.io/Posts.html
 
 [*] Encontrados mas possivelmente fora do escopo:
 
-https://www.youtube.com/?tab=w1
+https://tryhackme.com/p/SQU4NCH
+https://github.com/SQU4NCH
+https://www.linkedin.com/in/leo-teodoro/
 
 ```
