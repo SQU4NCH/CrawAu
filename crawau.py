@@ -3,6 +3,16 @@
 import argparse
 import sys
 from banner.Banner import banner
+import useragent
+
+#Cores
+R = '\033[31m'  # Vermelho
+G = '\033[32m'  # Verde
+END = '\033[0m'
+
+def error(msg):
+    print(f'{R}[-] ERRO: {msg}{END}')
+    sys.exit(1)
 
 try:
     import requests
@@ -19,11 +29,6 @@ except:
     print()
     print("pip install beautifulsoup4")
     sys.exit()
-
-#Cores
-R = '\033[31m'  # Vermelho
-G = '\033[32m'  # Verde
-END = '\033[0m'
 
 fora = set()
 noescopo = set()
@@ -63,7 +68,7 @@ def pega_links(url):
 
     return links
 
-# Função que verifica se os links encontrados estão disponíveis e se estão dentro do escopo
+# Função que verifica se os links encontrados estão dentro do escopo
 def verifica_links(links):
     for i in links:
         if i in noescopo:
@@ -86,15 +91,16 @@ parser.add_argument('-q', '--quiet',
 parser.add_argument('target',
                     help='Target url'
                     )
-parser.add_argument('-d', '--deep',
+parser.add_argument('-d',
                     dest='deep',
                     help='Deeping level for crawler (default: 0)'
                     )
-parser.add_argument('-u', '--user-agent',
-                    dest='user_agent',
-                    help='User agent for requests (default: CrawAu)'
+parser.add_argument('--random-agent',
+                    action='store_true',
+                    dest='random_agent',
+                    help='Random user agent for requests (default: CrawAu)'
                     )
-parser.add_argument('-o', '--output',
+parser.add_argument('-o', 
                     dest='file_name',
                     help='File to save the result'
                     )
@@ -102,6 +108,10 @@ parser.add_argument('--no-robots',
                     action='store_true',
                     dest='norobots',
                     help='Not look for robots.txt (default: no)'
+                    )
+parser.add_argument('--header',
+                    dest='header',
+                    help='header key:value (Ex: "Authorization: Basic YWxhZGRpbjpvcGVuc2VzYW1l")'
                     )                     
 args = parser.parse_args()
 
@@ -113,25 +123,35 @@ if "http" not in args.target:
 else:
     url = args.target
 
-if not args.user_agent:
-    headers = {'User-Agent': 'CrawAu'}
+if not args.header:
+    if not args.random_agent:
+        headers = {'User-Agent': 'CrawAu'}
+    else:
+        headers = {'User-Agent': useragent.random}
 else:
-    headers = {'User-Agent': args.user_agent}
+    h = args.header.split(":")
+    if not args.random_agent:
+        headers = {'User-Agent': 'CrawAu', h[0]: h[1].lstrip()}
+    else:
+        headers = {'User-Agent': useragent.random, h[0]: h[1].lstrip()}
 
 try:
     r = requests.get(url, headers=headers)
 except:
-    print(f'{R}[-] Não é possível se conectar a {args.target}{END}')  
-    sys.exit()  
+    error(f'Não é possível se conectar a {args.target}') 
 
 if not args.quiet:
     print(banner.banner)
     print()
+    if args.header:
+        print(f'[*] Headers: {args.header}')
+    if args.random_agent:
+        print(f'[*] User-Agent: {useragent.random}')
     print(f'[*] Conectando a {args.target}')
     print(f'{G}[+] Status Code {r.status_code}{END}')
-    try: #################
+    try:
         servidor = r.headers['Server']
-        print(f"[*] Servidor: {servidor}")
+        print(f"{G}[+] Servidor: {servidor}{END}")
     except:
         pass
     if not args.norobots:
