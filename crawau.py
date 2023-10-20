@@ -85,7 +85,7 @@ def verifica_links(links):
 # Função que enumera subdomínios de forma passiva
 def subFind(url):
     find = 0
-    with open("./CrawAu/wordlist.txt", "r") as lst:
+    with open("./wordlist.txt", "r") as lst:
         for i in lst:
             i = i.rstrip("\n")
             url = f"{i}.{url}"
