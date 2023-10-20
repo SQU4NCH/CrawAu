@@ -9,6 +9,8 @@ Ela realiza uma consulta na URL passada e identifica todos os links presentes na
 
 Existe também a possibilidade de realizar uma consulta em profundidade, onde a ferramenta após descobrir os links, entra neles e realiza uma nova consulta
 
+Outra função disponível na ferramenta é a descoberta de subdomínios da aplicação, sem que seja necessário realizar um brute force.
+
 ## Instalação
 1) ``git clone https://github.com/SQU4NCH/CrawAu``
 2) ``cd CrawAu``
