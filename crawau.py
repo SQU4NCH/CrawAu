@@ -4,6 +4,7 @@ import argparse
 import sys
 from banner.Banner import banner
 import useragent
+import socket
 
 #Cores
 R = '\033[31m'  # Vermelho
@@ -80,6 +81,24 @@ def verifica_links(links):
 
         noescopo.add(i)
         print(i)
+
+# Função que enumera subdomínios de forma passiva
+def subFind(url):
+    find = 0
+    with open("./CrawAu/wordlist.txt", "r") as lst:
+        for i in lst:
+            i = i.rstrip("\n")
+            url = f"{i}.{url}"
+
+            try:
+                ip = socket.gethostbyname(url)
+                print(f"{url}\t{ip}")
+                find += 1
+            except:
+                continue
+
+    if find == 0:
+        print(f"{R}[-] Nenhum subdominio encontrado{END}")
 
 # Menu de ajuda
 parser = argparse.ArgumentParser()
@@ -194,6 +213,23 @@ if not args.quiet:
     print()
     print(*fora, sep='\n')
     print()
+
+contr = 0
+while contr != 1:
+    isSub = input("[*] Você deseja enumerar subdominios? [S/n] ")
+
+    if isSub.lower() == 'n':
+        sys.exit(1)
+
+    if isSub == '' or isSub.lower() == 's':
+        contr = 1
+
+print("[*] Enumerando possiveis subdominios e seus IPs de forma passiva")
+print("[*] Isso pode demorar um pouco...")
+print()
+urlClean = url.split('/')[2]
+subFind(url)
+
 
 # Salva os links do escopo em um arquivo
 if args.file_name:
