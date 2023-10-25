@@ -1,6 +1,6 @@
 
 class banner:
-    versao = "0.8.0"
+    versao = "1.0.0"
     banner = f"""
     __________________
   <    CrawAu {versao}  >
