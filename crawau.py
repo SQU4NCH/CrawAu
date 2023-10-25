@@ -16,6 +16,14 @@ def error(msg):
     sys.exit(1)
 
 try:
+    import progressbar
+except:
+    print("É preciso instalar a biblioteca progressbar")
+    print()
+    print("pip3 install progressbar2")
+    sys.exit()
+
+try:
     import requests
 except:
     print("É preciso instalar a biblioteca requests")
@@ -86,7 +94,7 @@ def verifica_links(links):
 def subFind(url):
     find = 0
     with open("./wordlist.txt", "r") as lst:
-        for i in lst:
+        for i in progressbar.progressbar(lst, redirect_stdout=True):
             i = i.rstrip("\n")
             SubUrl = f"{i}.{url}"
 
