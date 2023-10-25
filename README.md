@@ -38,10 +38,10 @@ options:
 ## Exemplo
 
 ```
-➜ python3 crawau.py squ4nch.github.io
+➜  CrawAu python3 crawau.py squ4nch.github.io
 
     __________________
-  <    CrawAu 0.6.0  >
+  <    CrawAu 1.0.0  >
     ------------------
                 \   ^__^
                  \  (oo)\_______
@@ -50,7 +50,7 @@ options:
                         ||     ||
 
     By: Squ4nch
-    
+
 
 [*] Conectando a squ4nch.github.io
 [+] Status Code 200
@@ -64,25 +64,28 @@ Sitemap: https://squ4nch.github.io//sitemap.xml
 
 [*] Extraindo links presentes na página
 
-http://squ4nch.github.io//whoami
-http://squ4nch.github.io//write%20up/Desafio-Realista-1-e-2/
-http://squ4nch.github.io/#main
-http://squ4nch.github.io//categories
-http://squ4nch.github.io//write%20up/Desafio-Realista-7/
-http://squ4nch.github.io//write%20up/Daily-Bugle/
-http://squ4nch.github.io/#
-http://squ4nch.github.io//page2/
 http://squ4nch.github.io//page3/
-http://squ4nch.github.io//opsec/Ataques-de-desanonimiza%C3%A7%C3%A3o-contra-a-rede-Tor/
-http://squ4nch.github.io//write%20up/Desafio-Realista-3-e-4/
-http://squ4nch.github.io/#footer
-http://squ4nch.github.io/#site-nav
+http://squ4nch.github.io//page4/
+http://squ4nch.github.io//write%20up/RCE-via-polyglot-file/
+http://squ4nch.github.io//whoami
 http://squ4nch.github.io//
+http://squ4nch.github.io/#
+http://squ4nch.github.io//programa%C3%A7%C3%A3o/Entendendo-a-compilacao/
+http://squ4nch.github.io//categories
+http://squ4nch.github.io//mobile/Interceptando-trafego-Android/
+http://squ4nch.github.io//page2/
+http://squ4nch.github.io/#site-nav
+http://squ4nch.github.io/#main
+http://squ4nch.github.io/#footer
+http://squ4nch.github.io//review/Minha-experiencia-com-a-DCPT/
+http://squ4nch.github.io//write%20up/Desafio-Realista-7/
 
 [*] Encontrados mas possivelmente fora do escopo:
 
-https://github.com/SQU4NCH
+https://tryhackme.com/p/SQU4NCH
 https://www.instagram.com/ltxsecurity/
+https://github.com/SQU4NCH
 https://www.linkedin.com/in/leo-teodoro/
 
+[*] Você deseja enumerar subdominios? [S/n] n
 ```
