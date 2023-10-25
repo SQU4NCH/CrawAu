@@ -88,11 +88,11 @@ def subFind(url):
     with open("./wordlist.txt", "r") as lst:
         for i in lst:
             i = i.rstrip("\n")
-            url = f"{i}.{url}"
+            SubUrl = f"{i}.{url}"
 
             try:
-                ip = socket.gethostbyname(url)
-                print(f"{url}\t{ip}")
+                ip = socket.gethostbyname(SubUrl)
+                print(f"{SubUrl}\t{ip}")
                 find += 1
             except:
                 continue
@@ -228,7 +228,7 @@ print("[*] Enumerando possiveis subdominios e seus IPs de forma passiva")
 print("[*] Isso pode demorar um pouco...")
 print()
 urlClean = url.split('/')[2]
-subFind(url)
+subFind(urlClean)
 
 
 # Salva os links do escopo em um arquivo
