@@ -9,6 +9,8 @@ Ela realiza uma consulta na URL passada e identifica todos os links presentes na
 
 Existe também a possibilidade de realizar uma consulta em profundidade, onde a ferramenta após descobrir os links, entra neles e realiza uma nova consulta
 
+Além dos links, a ferramenta também retorna todos os arquivos JavaScript presentes na URL e também realiza buscas por informações sensíveis dentro deles, como por exemplo, chaves de API, secrets, entre outros
+
 Outra função disponível na ferramenta é a descoberta de subdomínios da aplicação, sem que seja necessário realizar um brute force.
 
 ## Instalação
