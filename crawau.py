@@ -5,6 +5,7 @@ import sys
 from banner.Banner import banner
 import useragent
 import socket
+import findsecrets
 
 #Cores
 R = '\033[31m'  # Vermelho
@@ -73,9 +74,34 @@ def pega_links(url):
         if "http" in link.get("href"):
             links.add(link.get("href"))
         else:
+            if link.get("href")[0] == "/":
+                links.add(f'{url}{link.get("href")}')
+                continue
             links.add(f'{url}/{link.get("href")}')
 
     return links
+
+# Função que busca arquivos .js presentes na página
+def enum_js(url):
+    r = requests.get(url, headers=headers)
+    content = r.text
+    
+    soup = BeautifulSoup(content, 'html.parser')
+    all_links = soup.find_all('script')
+
+    js = set()
+    for link in all_links:
+        try:
+            if "http" in link.get("src"):
+                js.add(link.get("src"))
+            else:
+                if link.get("src")[0] == "/":
+                    js.add(f'{url}{link.get("src")}')
+                    continue
+                js.add(f'{url}/{link.get("src")}')
+        except:
+            continue
+    return js
 
 # Função que verifica se os links encontrados estão dentro do escopo
 def verifica_links(links):
@@ -94,10 +120,9 @@ def verifica_links(links):
 def subFind(url):
     find = 0
     with open("./wordlist.txt", "r") as lst:
-        for i in progressbar.progressbar(lst, redirect_stdout=True):
+        for i in progressbar.progressbar(lst, redirect_stdout=True):  
             i = i.rstrip("\n")
             SubUrl = f"{i}.{url}"
-
             try:
                 ip = socket.gethostbyname(SubUrl)
                 print(f"{SubUrl}\t{ip}")
@@ -135,6 +160,11 @@ parser.add_argument('--no-robots',
                     action='store_true',
                     dest='norobots',
                     help='Not look for robots.txt (default: no)'
+                    )
+parser.add_argument('--no-js',
+                    action='store_true',
+                    dest='nojs',
+                    help='Not look for js files (default: no)'
                     )
 parser.add_argument('--header',
                     dest='header',
@@ -222,6 +252,31 @@ if not args.quiet:
     print(*fora, sep='\n')
     print()
 
+# Faz a busca dos arquivos JS e depois busca por informações sensíveis
+if not args.nojs:
+    print("[*] Extraindo arquivos JS presentes na página")
+    script = enum_js(url)
+    print()
+    if len(script) == 0:
+        print(f"{R}[-] Nada encontrado!{END}")
+    else:
+        verifica_links(script)
+        print()
+
+        print("[*] Buscando por informações sensíveis nos arquivos JS")
+
+        try:
+            result = findsecrets.find_secrets(script, headers)
+
+            if result == 0:
+                print()
+                print(f"{R}[-] Nada encontrado!{END}")
+
+            print()
+        except:
+            print(f"{R}[-] Não foi possível extrair o conteúdo dos arquivos JS{END}")
+
+
 contr = 0
 while contr != 1:
     isSub = input("[*] Você deseja enumerar subdominios? [S/n] ")
@@ -237,7 +292,6 @@ print("[*] Isso pode demorar um pouco...")
 print()
 urlClean = url.split('/')[2]
 subFind(urlClean)
-
 
 # Salva os links do escopo em um arquivo
 if args.file_name:
