@@ -5,7 +5,7 @@ import sys
 import socket
 import requests
 from bs4 import BeautifulSoup
-import progressbar # Importar progressbar aqui
+import progressbar 
 
 # Tenta importar módulos locais ou de bibliotecas
 try:
@@ -37,7 +37,7 @@ except ImportError:
     findsecrets = MockFindSecrets()
 
 
-# Cores (mantido)
+# Cores
 R = '\033[31m'  # Vermelho
 G = '\033[32m'  # Verde
 Y = '\033[33m'  # Amarelo
@@ -47,7 +47,7 @@ END = '\033[0m'
 fora = set()
 noescopo = set()
 verifica = set()
-js_files = set() # Set específico para arquivos JS
+js_files = set()
 
 # -- Funções Auxiliares --
 
@@ -119,7 +119,7 @@ def verifica_git_exposed(session, base_url, silent=False):
     try:
         # HEAD=1 para evitar baixar o arquivo inteiro se for grande
         r = session.head(target_url, timeout=5, allow_redirects=False)
-        # Podemos tentar um GET se o HEAD falhar ou for bloqueado
+        
         if r.status_code != 200:
              r = session.get(target_url, timeout=5, allow_redirects=False, stream=True) # stream=True para ler só o necessário
 
@@ -276,7 +276,7 @@ if __name__ == "__main__":
         target_domain = base_url.split('/')[2] # Extrai o domínio da URL
 
     # Define o User-Agent
-    user_agent_str = useragent.random if args.random_agent else 'CrawAu/1.0'
+    user_agent_str = useragent.random if args.random_agent else 'CrawAu/2.0'
 
     # Configura a sessão requests
     session = configure_session(user_agent_str, args.header)
@@ -295,7 +295,7 @@ if __name__ == "__main__":
     # Verifica conexão inicial
     try:
         print_info(f"Testando conexão com {base_url}...")
-        r = session.head(base_url, timeout=10, allow_redirects=True) # HEAD é mais leve
+        r = session.head(base_url, timeout=10, allow_redirects=True) 
         r.raise_for_status()
         print_success(f"Conexão bem-sucedida (Status: {r.status_code})")
         final_url = r.url # Pega a URL final após redirecionamentos
@@ -319,7 +319,7 @@ if __name__ == "__main__":
         verifica_arquivo(session, base_url, "robots.txt", args.quiet)
 
     if not args.no_git_check:
-        verifica_git_exposed(session, base_url, args.quiet) # <<< Nova função chamada aqui
+        verifica_git_exposed(session, base_url, args.quiet) 
 
     # --- Crawling ---
     print_info("Iniciando extração de links e arquivos JS...")
@@ -389,9 +389,6 @@ if __name__ == "__main__":
     if not args.no_js and js_files:
         print_info("Iniciando busca por informações sensíveis nos arquivos JS...")
         try:
-            # Usa a sessão configurada para buscar secrets
-            # findsecrets precisa ser adaptado para usar a sessão ou recriar headers
-            # Por simplicidade, vamos passar os headers da sessão
             result_count = findsecrets.find_secrets(js_files, session.headers)
             if result_count == 0:
                 print_info("Nenhuma informação sensível encontrada nos arquivos JS analisados.")
